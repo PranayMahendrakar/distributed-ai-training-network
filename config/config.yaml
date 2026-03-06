@@ -1,0 +1,124 @@
+# ============================================================
+# Distributed AI Training Network - Configuration
+# ============================================================
+
+# Server Configuration
+server:
+  host: "0.0.0.0"
+  port: 8080
+  grpc_port: 50051
+  max_workers: 20
+  node_timeout: 300  # seconds before node considered inactive
+  log_level: "INFO"
+
+# Federated Learning Configuration
+federated:
+  num_rounds: 100
+  min_nodes: 2
+  max_nodes: 1000
+  
+  # Node Selection Strategy
+  selection:
+    strategy: "random"  # Options: random, weighted, all, reputation
+    fraction: 0.8       # Fraction of nodes to select per round
+    min_nodes: 3        # Minimum nodes required to start round
+    
+  # Aggregation Strategy
+  aggregation:
+    strategy: "fedavg"  # Options: fedavg, fedprox, fednova, fedadam
+    min_updates: 2       # Min updates before aggregation
+    wait_timeout: 300    # Max wait time for node updates (seconds)
+    
+    # FedProx specific
+    mu: 0.01            # Proximal regularization term
+    
+    # FedAdam specific
+    server_lr: 0.01
+    beta1: 0.9
+    beta2: 0.99
+
+# Privacy Configuration
+privacy:
+  enabled: true
+  
+  # Differential Privacy
+  epsilon: 1.0          # Privacy budget (lower = more private)
+  delta: 1.0e-5         # Failure probability
+  mechanism: "gaussian" # Options: gaussian, laplace
+  sensitivity: 1.0      # L2 sensitivity
+  
+  # Gradient Clipping
+  clip_norm: 1.0        # Maximum L2 norm for clipping
+  
+  # Privacy Accounting
+  accountant: "rdp"     # Options: rdp, basic, moments
+
+# Communication & Compression
+compression:
+  enabled: true
+  method: "topk"        # Options: topk, random, quantization, combined
+  ratio: 0.1            # Fraction of gradients to transmit (0.1 = 90% compression)
+  quantize_bits: 8      # Bit width for quantization
+  error_feedback: true  # Enable error feedback for convergence
+
+# Local Training Configuration (per node)
+local_training:
+  epochs: 5             # Local epochs per round
+  batch_size: 32
+  learning_rate: 0.01
+  optimizer: "sgd"      # Options: sgd, adam
+  momentum: 0.9
+  weight_decay: 1.0e-4
+  lr_scheduler: "cosine" # Options: cosine, step, warmup, none
+
+# Model Configuration
+model:
+  architecture: "mlp"   # Options: mlp, cnn, resnet, transformer
+  input_dim: 784        # MNIST: 784, CIFAR-10: 3072
+  hidden_dims: [128, 64]
+  output_dim: 10        # Number of classes
+  activation: "relu"
+
+# Data Configuration
+data:
+  dataset: "mnist"      # Options: mnist, cifar10, custom
+  num_classes: 10
+  normalize: true
+  augmentation: false
+  
+  # IID vs Non-IID distribution
+  distribution: "non_iid"  # Options: iid, non_iid, dirichlet
+  alpha: 0.5               # Dirichlet concentration (lower = more non-IID)
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  dashboard_port: 8081
+  log_interval: 10      # Log every N rounds
+  save_checkpoints: true
+  checkpoint_interval: 25  # Save every N rounds
+  checkpoint_dir: "./checkpoints"
+  
+  # Metrics to track
+  metrics:
+    - global_loss
+    - global_accuracy
+    - node_losses
+    - privacy_budget
+    - communication_bytes
+    - convergence_rate
+
+# Security Configuration
+security:
+  secure_aggregation: true
+  min_shares: 3          # Minimum shares for secret reconstruction
+  verify_updates: true   # Verify gradient integrity
+  rate_limiting: true    # Limit node update frequency
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s | %(name)s | %(levelname)s | %(message)s"
+  file: "logs/federated_training.log"
+  max_size_mb: 100
+  backup_count: 5
