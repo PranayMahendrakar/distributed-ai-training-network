@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Data & Models (don't commit sensitive data)
+data/
+*.csv
+*.json
+!config/*.json
+checkpoints/
+*.pth
+*.pt
+*.pkl
+*.bin
+*.h5
+
+# Logs
+logs/
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Privacy - NEVER commit real node data
+node_data/
+private_data/
+secrets/
+*.key
+*.pem
+*.cert
+
+# Temporary
+tmp/
+temp/
+*.tmp
